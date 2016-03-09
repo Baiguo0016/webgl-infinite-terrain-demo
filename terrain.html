@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <title>Infinite Terrain Demo</title>
+
+    <link rel="stylesheet" type="text/css" href="terrain.css" />
+
+    <script type="text/javascript" src="height.js"></script>
+    <script type="text/javascript" src="math.js"></script>
+    <script type="text/javascript" src="terrain.js"></script>
+
+    <script id="shader-vs" type="x-shader/x-vertex">
+      const float AMBIENT_LIGHT = 0.4;
+      const float SUN_LIGHT = 0.2;
+      const vec3 SUN_DIRECTION = vec3(1.0, 1.0, 1.0);
+      const vec3 TERRAIN_COLOR = vec3(1.0, 0.9, 0.8);
+      const vec3 FOG_COLOR = vec3(0.6, 0.8, 1.0);
+
+      attribute vec3 aVertexPosition;
+      attribute vec3 aVertexNormal;
+
+      uniform mat4 uTransformMatrix;
+
+      varying vec3 vColor;
+      varying float vFog;
+
+      void main(void) {
+        gl_Position = uTransformMatrix * vec4(aVertexPosition, 1.0);
+        float sunStrength = abs(dot(aVertexNormal, SUN_DIRECTION));
+        float brightness = AMBIENT_LIGHT + SUN_LIGHT * sunStrength;
+        // TODO: Should instead be based on the magnitude of the view space
+        // coordinates, so that rotating the camera doesn't change an object's
+        // fog intensity.
+        float fogIntensity = gl_Position[2] / 200.0;
+        vColor = mix(brightness * TERRAIN_COLOR, FOG_COLOR, fogIntensity);
+      }
+    </script>
+
+    <script id="shader-fs" type="x-shader/x-fragment">
+      precision mediump float;
+
+      varying vec3 vColor;
+      varying float vFog;
+
+      void main(void) {
+        gl_FragColor = vec4(vColor, 1);
+      }
+    </script>
+  </head>
+
+  <body>
+    <p style="float: right"><span id="fps">0</span> FPS</p>
+    <h1>Infinite Terrain Demo</h1>
+    <canvas id="canvas" width="800" height="600"></canvas>
+  </body>
+</html>
