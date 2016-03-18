@@ -1,3 +1,5 @@
+// This is Ken Perlin's "smootherstep" function, whose first and second
+// derivatives both have endpoints at zero.
 function smootherstep(edge0, edge1, x) {
   // Scale, and clamp x to [0..1] range.
   var x = clamp((x - edge0)/(edge1 - edge0), 0.0, 1.0);
