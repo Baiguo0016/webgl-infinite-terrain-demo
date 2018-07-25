@@ -2,7 +2,7 @@ const SPEED = 20;
 const CAMERA_HEIGHT = 20;
 const FIELD_OF_VIEW_RADIANS = 1.5;
 const Z_NEAR = 0.1;
-const Z_FAR = 200;
+const Z_FAR = 100;
 
 const TILE_LENGTH = 20;
 const TILE_AREA = TILE_LENGTH * TILE_LENGTH;
